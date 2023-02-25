@@ -11,10 +11,80 @@ import (
 	"strings"
 )
 
+// CreateSnapshot - Creates a new Snapshot
+func (c *Client) CreateSnapshot(snapshot Snapshot) (*Snapshot, error) {
+
+	rb, err := json.Marshal(snapshot)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(
+		"POST",
+		fmt.Sprintf("%s/snapshot", c.ApiURL),
+		strings.NewReader(string(rb)),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	snapshot = Snapshot{}
+
+	err = json.Unmarshal(body, &snapshot)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &snapshot, nil
+}
+
+// GetSnapshot - Gets a new Snapshot
+func (c *Client) GetSnapshot(snapshotId string) (*Snapshot, error) {
+
+	req, err := http.NewRequest(
+		"GET",
+		fmt.Sprintf("%s/snapshot/%s", c.ApiURL, snapshotId),
+		nil,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	snapshot = Snapshot{}
+
+	err = json.Unmarshal(body, &snapshot)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &snapshot, nil
+}
+
 // DeleteSnapshot - Deletes a Snapshot
 func (c *Client) DeleteSnapshot(snapshotId string) error {
 
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/snapshot/%s", c.ApiURL, snapshotId), nil)
+	req, err := http.NewRequest(
+		"DELETE",
+		fmt.Sprintf("%s/snapshot/%s", c.ApiURL, snapshotId),
+		nil,
+	)
 
 	if err != nil {
 		return err

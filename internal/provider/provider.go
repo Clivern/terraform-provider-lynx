@@ -8,6 +8,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/clivern/terraform-provider-lynx/sdk"
+
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -86,40 +88,35 @@ func (p *lynxProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	/*
-		api_url := os.Getenv("LYNX_API_URL")
-		api_key := os.Getenv("LYNX_API_KEY")
 
-		if !data.ApiURL.IsNull() {
-			api_url = data.ApiURL.ValueString()
-		}
+	api_url := os.Getenv("LYNX_API_URL")
+	api_key := os.Getenv("LYNX_API_KEY")
 
-		if !data.ApiKey.IsNull() {
-			api_key = data.ApiKey.ValueString()
-		}
-	*/
+	if !data.ApiURL.IsNull() {
+		api_url = data.ApiURL.ValueString()
+	}
 
-	client := http.DefaultClient
+	if !data.ApiKey.IsNull() {
+		api_key = data.ApiKey.ValueString()
+	}
+
+	client := sdk.NewClient(api_url, api_key)
 	resp.DataSourceData = client
 	resp.ResourceData = client
 }
 
 func (p *lynxProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewExampleResource,
+		UserResource,
 	}
 }
 
 func (p *lynxProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{
-		NewExampleDataSource,
-	}
+	return []func() datasource.DataSource{}
 }
 
 func (p *lynxProvider) Functions(ctx context.Context) []func() function.Function {
-	return []func() function.Function{
-		NewExampleFunction,
-	}
+	return []func() function.Function{}
 }
 
 func New(version string) func() provider.Provider {

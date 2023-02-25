@@ -16,7 +16,6 @@ type User struct {
 	Email    string `json:"email,omitempty"`
 	Role     string `json:"role,omitempty"`
 	Password string `json:"password,omitempty"`
-	Verified bool   `json:"verified,omitempty"`
 }
 
 // Team Model

@@ -13,13 +13,84 @@ import (
 
 // CreateUser - Creates a new User
 func (c *Client) CreateUser(user User) (*User, error) {
+
 	rb, err := json.Marshal(user)
 
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/user", c.ApiURL), strings.NewReader(string(rb)))
+	req, err := http.NewRequest(
+		"POST",
+		fmt.Sprintf("%s/user", c.ApiURL),
+		strings.NewReader(string(rb)),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user = User{}
+
+	err = json.Unmarshal(body, &user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+// UpdateUser - Updates a new User
+func (c *Client) UpdateUser(user User) (*User, error) {
+
+	rb, err := json.Marshal(user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(
+		"PUT",
+		fmt.Sprintf("%s/user/%s", c.ApiURL, user.ID),
+		strings.NewReader(string(rb)),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user = User{}
+
+	err = json.Unmarshal(body, &user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+// GetUser - Gets a new User
+func (c *Client) GetUser(userId string) (*User, error) {
+
+	req, err := http.NewRequest(
+		"GET",
+		fmt.Sprintf("%s/user/%s", c.ApiURL, userId),
+		nil,
+	)
 
 	if err != nil {
 		return nil, err
@@ -45,7 +116,11 @@ func (c *Client) CreateUser(user User) (*User, error) {
 // DeleteUser - Deletes a User
 func (c *Client) DeleteUser(userId string) error {
 
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/user/%s", c.ApiURL, userId), nil)
+	req, err := http.NewRequest(
+		"DELETE",
+		fmt.Sprintf("%s/user/%s", c.ApiURL, userId),
+		nil,
+	)
 
 	if err != nil {
 		return err
