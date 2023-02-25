@@ -13,6 +13,13 @@
 <br/>
 
 
+### Usage
+
+```zsh
+$
+```
+
+
 ### Versioning
 
 For transparency into our release cycle and in striving to maintain backward compatibility, `terraform-provider-lynx` is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.
