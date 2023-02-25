@@ -102,7 +102,7 @@ func (c *Client) GetProject(projectId string) (*Project, error) {
 		return nil, err
 	}
 
-	project = Project{}
+	project := Project{}
 
 	err = json.Unmarshal(body, &project)
 

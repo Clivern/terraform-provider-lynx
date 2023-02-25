@@ -100,7 +100,7 @@ func (c *Client) GetEnvironment(projectId, environmentId string) (*Environment, 
 		return nil, err
 	}
 
-	environment = Environment{}
+	environment := Environment{}
 
 	err = json.Unmarshal(body, &environment)
 

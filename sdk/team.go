@@ -102,7 +102,7 @@ func (c *Client) GetTeam(teamId string) (*Team, error) {
 		return nil, err
 	}
 
-	team = Team{}
+	team := Team{}
 
 	err = json.Unmarshal(body, &team)
 

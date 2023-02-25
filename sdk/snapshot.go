@@ -66,7 +66,7 @@ func (c *Client) GetSnapshot(snapshotId string) (*Snapshot, error) {
 		return nil, err
 	}
 
-	snapshot = Snapshot{}
+	snapshot := Snapshot{}
 
 	err = json.Unmarshal(body, &snapshot)
 

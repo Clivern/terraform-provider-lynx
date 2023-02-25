@@ -102,7 +102,7 @@ func (c *Client) GetUser(userId string) (*User, error) {
 		return nil, err
 	}
 
-	user = User{}
+	user := User{}
 
 	err = json.Unmarshal(body, &user)
 
