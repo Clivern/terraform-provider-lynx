@@ -2,6 +2,9 @@
     <img alt="Lynx Logo" src="https://www.vectorlogo.zone/logos/hashicorp/hashicorp-icon.svg" width="180" />
     <h3 align="center">Lynx Terraform Provider</h3>
     <p align="center">
+        <a href="https://github.com/Clivern/terraform-provider-lynx/actions/workflows/test.yml">
+            <img src="https://github.com/Clivern/terraform-provider-lynx/actions/workflows/test.yml/badge.svg"/>
+        </a>
         <a href="https://github.com/clivern/terraform-provider-lynx/releases">
             <img src="https://img.shields.io/badge/Version-0.1.0-1abc9c.svg">
         </a>
