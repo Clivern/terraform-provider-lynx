@@ -1,5 +1,6 @@
-// Copyright (c) HashiCorp, Inc.
-// SPDX-License-Identifier: MPL-2.0
+// Copyright 2024 Clivern. All rights reserved.
+// Use of this source code is governed by the MIT
+// license that can be found in the LICENSE file.
 
 package main
 
