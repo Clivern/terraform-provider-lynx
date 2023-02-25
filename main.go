@@ -4,13 +4,15 @@
 package main
 
 import (
-    "context"
-    "flag"
-    "log"
+	"context"
+	"flag"
+	"fmt"
+	"log"
 
-    "github.com/hashicorp/terraform-plugin-framework/providerserver"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 
-    "terraform-provider-lynx/internal/provider"
+	"terraform-provider-lynx/internal/provider"
+	"terraform-provider-lynx/sdk"
 )
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
@@ -35,6 +37,23 @@ var (
 func main() {
 	var debug bool
 
+	client := sdk.NewClient(sdk.LocalApiServer, "bd11a454-a694-49c8-b3da-0fe6cf48a27d")
+
+	usr, err := client.CreateUser(sdk.User{
+		Name:     "Selena",
+		Email:    "selena@clivern.com",
+		Role:     sdk.RegularUser,
+		Password: "$123456789$",
+	})
+
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Printf("%v", usr)
+	}
+
+	client.DeleteUser("84c1e6ec-7e6a-4ab8-967e-666ebcc27198")
+
 	flag.BoolVar(&debug, "debug", false, "set to true to run the provider with support for debuggers like delve")
 	flag.Parse()
 
@@ -46,7 +65,7 @@ func main() {
 		Debug:   debug,
 	}
 
-	err := providerserver.Serve(context.Background(), provider.New(version), opts)
+	err = providerserver.Serve(context.Background(), provider.New(version), opts)
 
 	if err != nil {
 		log.Fatal(err.Error())

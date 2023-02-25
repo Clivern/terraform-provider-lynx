@@ -1,5 +1,6 @@
-// Copyright (c) HashiCorp, Inc.
-// SPDX-License-Identifier: MPL-2.0
+// Copyright 2024 Clivern. All rights reserved.
+// Use of this source code is governed by the MIT
+// license that can be found in the LICENSE file.
 
 package provider
 
@@ -9,6 +10,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/function"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -48,7 +50,7 @@ func (p *lynxProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			"api_key": schema.StringAttribute{
 				MarkdownDescription: "Lynx API Key",
 				Optional:            true,
-				Sensitive: true,
+				Sensitive:           true,
 			},
 		},
 	}
@@ -63,42 +65,39 @@ func (p *lynxProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-    if data.ApiURL.IsUnknown() {
-        resp.Diagnostics.AddAttributeError(
-            path.Root("api_url"),
-            "Unknown Lynx API URL",
-            "The provider cannot create the Lynx API client as there is an unknown configuration value for the Lynx API URL. "+
-                "Either target apply the source of the value first, set the value statically in the configuration, or use the LYNX_API_URL environment variable.",
-        )
-    }
-
-    if data.ApiKey.IsUnknown() {
-        resp.Diagnostics.AddAttributeError(
-            path.Root("api_key"),
-            "Unknown Lynx API Key",
-            "The provider cannot create the Lynx API client as there is an unknown configuration value for the Lynx API Key. "+
-                "Either target apply the source of the value first, set the value statically in the configuration, or use the LYNX_API_KEY environment variable.",
-        )
-    }
-
-	// Configuration values are now available.
-	if data.ApiURL.IsNull() {
-        resp.Diagnostics.AddAttributeError(
-            path.Root("api_url"),
-            "Unknown Lynx API URL",
-            "The provider cannot create the Lynx API client as there is an unknown configuration value for the Lynx API URL. "+
-                "Either target apply the source of the value first, set the value statically in the configuration, or use the LYNX_API_URL environment variable.",
-        )
+	if data.ApiURL.IsUnknown() {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("api_url"),
+			"Unknown Lynx API URL",
+			"The provider cannot create the Lynx API client as there is an unknown configuration value for the Lynx API URL. "+
+				"Either target apply the source of the value first, set the value statically in the configuration, or use the LYNX_API_URL environment variable.",
+		)
 	}
 
-	if data.ApiKey.IsNull() {
-        resp.Diagnostics.AddAttributeError(
-            path.Root("api_key"),
-            "Unknown Lynx API Key",
-            "The provider cannot create the Lynx API client as there is an unknown configuration value for the Lynx API Key. "+
-                "Either target apply the source of the value first, set the value statically in the configuration, or use the LYNX_API_KEY environment variable.",
-        )
+	if data.ApiKey.IsUnknown() {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("api_key"),
+			"Unknown Lynx API Key",
+			"The provider cannot create the Lynx API client as there is an unknown configuration value for the Lynx API Key. "+
+				"Either target apply the source of the value first, set the value statically in the configuration, or use the LYNX_API_KEY environment variable.",
+		)
 	}
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	/*
+		api_url := os.Getenv("LYNX_API_URL")
+		api_key := os.Getenv("LYNX_API_KEY")
+
+		if !data.ApiURL.IsNull() {
+			api_url = data.ApiURL.ValueString()
+		}
+
+		if !data.ApiKey.IsNull() {
+			api_key = data.ApiKey.ValueString()
+		}
+	*/
 
 	client := http.DefaultClient
 	resp.DataSourceData = client
