@@ -14,6 +14,8 @@ import (
 // CreateSnapshot - Creates a new Snapshot
 func (c *Client) CreateSnapshot(snapshot Snapshot) (*Snapshot, error) {
 
+	snapshot.TeamId = snapshot.Team.ID
+
 	rb, err := json.Marshal(snapshot)
 
 	if err != nil {
@@ -44,6 +46,8 @@ func (c *Client) CreateSnapshot(snapshot Snapshot) (*Snapshot, error) {
 		return nil, err
 	}
 
+	snapshot.TeamId = snapshot.Team.ID
+
 	return &snapshot, nil
 }
 
@@ -73,6 +77,8 @@ func (c *Client) GetSnapshot(snapshotId string) (*Snapshot, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	snapshot.TeamId = snapshot.Team.ID
 
 	return &snapshot, nil
 }

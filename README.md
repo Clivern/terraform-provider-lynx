@@ -1,12 +1,12 @@
 <p align="center">
     <img alt="Lynx Logo" src="https://www.vectorlogo.zone/logos/hashicorp/hashicorp-icon.svg" width="180" />
-    <h3 align="center">Lynx Terraform Provider</h3>
+    <h3 align="center"></h3>
     <p align="center">
         <a href="https://github.com/Clivern/terraform-provider-lynx/actions/workflows/test.yml">
             <img src="https://github.com/Clivern/terraform-provider-lynx/actions/workflows/test.yml/badge.svg"/>
         </a>
         <a href="https://github.com/clivern/terraform-provider-lynx/releases">
-            <img src="https://img.shields.io/badge/Version-0.1.0-1abc9c.svg">
+            <img src="https://img.shields.io/badge/Version-0.2.0-1abc9c.svg">
         </a>
         <a href="https://github.com/clivern/terraform-provider-lynx/blob/master/LICENSE">
             <img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg">
@@ -18,8 +18,95 @@
 
 ### Usage
 
-```zsh
-$
+Here is an example to setup team, team users, project, project environment and a snapshot.
+
+```hcl
+terraform {
+  required_providers {
+    lynx = {
+      source = "Clivern/lynx"
+      version = "0.2.0"
+    }
+  }
+}
+
+provider "lynx" {
+  api_url = "http://localhost:4000/api/v1"
+  api_key = "~api key here~"
+}
+
+resource "lynx_user" "stella" {
+  name     = "Stella"
+  email    = "stella@example.com"
+  role     = "regular"
+  password = "~password-here~"
+}
+
+resource "lynx_user" "skylar" {
+  name     = "Skylar"
+  email    = "skylar@example.com"
+  role     = "regular"
+  password = "~password-here~"
+}
+
+resource "lynx_user" "erika" {
+  name     = "Erika"
+  email    = "erika@example.com"
+  role     = "regular"
+  password = "~password-here~"
+}
+
+resource "lynx_user" "adriana" {
+  name     = "Adriana"
+  email    = "adriana@example.com"
+  role     = "regular"
+  password = "~password-here~"
+}
+
+resource "lynx_team" "monitoring" {
+  name        = "Monitoring"
+  slug        = "monitoring"
+  description = "System Monitoring Team"
+
+  members = [
+    lynx_user.stella.id,
+    lynx_user.skylar.id,
+    lynx_user.erika.id,
+    lynx_user.adriana.id
+  ]
+}
+
+resource "lynx_project" "grafana" {
+  name        = "Grafana"
+  slug        = "grafana"
+  description = "Grafana Project"
+
+  team = {
+    id = lynx_team.monitoring.id
+  }
+}
+
+resource "lynx_environment" "prod" {
+  name     = "Development"
+  slug     = "dev"
+  username = "~username-here~"
+  secret   = "~secret-here~"
+
+  project = {
+    id = lynx_project.grafana.id
+  }
+}
+
+resource "lynx_snapshot" "my_snapshot" {
+  title       = "Grafana Project Snapshot"
+  description = "Grafana Project Snapshot"
+  record_type = "project"
+  record_id   = lynx_project.grafana.id
+
+  team = {
+    id = lynx_team.monitoring.id
+  }
+}
 ```
 
 

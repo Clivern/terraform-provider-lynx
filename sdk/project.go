@@ -14,6 +14,8 @@ import (
 // CreateProject - Creates a new Project
 func (c *Client) CreateProject(project Project) (*Project, error) {
 
+	project.TeamId = project.Team.ID
+
 	rb, err := json.Marshal(project)
 
 	if err != nil {
@@ -44,11 +46,15 @@ func (c *Client) CreateProject(project Project) (*Project, error) {
 		return nil, err
 	}
 
+	project.TeamId = project.Team.ID
+
 	return &project, nil
 }
 
 // UpdateProject - Updates a new Project
 func (c *Client) UpdateProject(project Project) (*Project, error) {
+
+	project.TeamId = project.Team.ID
 
 	rb, err := json.Marshal(project)
 
@@ -80,6 +86,8 @@ func (c *Client) UpdateProject(project Project) (*Project, error) {
 		return nil, err
 	}
 
+	project.TeamId = project.Team.ID
+
 	return &project, nil
 }
 
@@ -109,6 +117,8 @@ func (c *Client) GetProject(projectId string) (*Project, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	project.TeamId = project.Team.ID
 
 	return &project, nil
 }

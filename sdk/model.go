@@ -20,10 +20,11 @@ type User struct {
 
 // Team Model
 type Team struct {
-	ID          string `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Slug        string `json:"slug,omitempty"`
-	Description string `json:"description,omitempty"`
+	ID          string   `json:"id,omitempty"`
+	Name        string   `json:"name,omitempty"`
+	Slug        string   `json:"slug,omitempty"`
+	Description string   `json:"description,omitempty"`
+	Members     []string `json:"members,omitempty"`
 }
 
 // Project Model
@@ -32,6 +33,7 @@ type Project struct {
 	Name        string `json:"name,omitempty"`
 	Slug        string `json:"slug,omitempty"`
 	Description string `json:"description,omitempty"`
+	TeamId      string `json:"team_id,omitempty"`
 	Team        Team   `json:"team,omitempty"`
 }
 
@@ -52,5 +54,6 @@ type Snapshot struct {
 	Description string `json:"description,omitempty"`
 	RecordType  string `json:"record_type,omitempty"`
 	RecordID    string `json:"record_uuid,omitempty"`
+	TeamId      string `json:"team_id,omitempty"`
 	Team        Team   `json:"team,omitempty"`
 }
