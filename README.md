@@ -1,6 +1,6 @@
 <p align="center">
     <img alt="Lynx Logo" src="https://www.vectorlogo.zone/logos/hashicorp/hashicorp-icon.svg" width="180" />
-    <h3 align="center"></h3>
+    <h3 align="center">Lynx Terrafom Provider</h3>
     <p align="center">
         <a href="https://github.com/Clivern/terraform-provider-lynx/actions/workflows/test.yml">
             <img src="https://github.com/Clivern/terraform-provider-lynx/actions/workflows/test.yml/badge.svg"/>
