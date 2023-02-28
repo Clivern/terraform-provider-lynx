@@ -1,6 +1,7 @@
-## 0.3.0 (Unreleased)
+## 0.3.0
 
 - Improve Logging.
+- Add development script
 
 
 ## 0.2.0 (Unreleased)

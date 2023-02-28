@@ -6,10 +6,10 @@
             <img src="https://github.com/Clivern/terraform-provider-lynx/actions/workflows/test.yml/badge.svg"/>
         </a>
         <a href="https://github.com/clivern/terraform-provider-lynx/releases">
-            <img src="https://img.shields.io/badge/Version-0.2.0-1abc9c.svg">
+            <img src="https://img.shields.io/badge/Version-0.3.0-1abc9c.svg">
         </a>
         <a href="https://registry.terraform.io/providers/Clivern/lynx/latest">
-            <img src="https://img.shields.io/badge/Provider-0.2.0-yellow.svg">
+            <img src="https://img.shields.io/badge/Provider-0.3.0-yellow.svg">
         </a>
         <a href="https://github.com/clivern/terraform-provider-lynx/blob/master/LICENSE">
             <img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg">
