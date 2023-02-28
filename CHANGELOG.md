@@ -4,7 +4,7 @@
 - Add development script
 
 
-## 0.2.0 (Unreleased)
+## 0.2.0
 
 - Add User Resource.
 - Add Team Resource.
