@@ -134,6 +134,8 @@ func (r *EnvironmentResource) Create(ctx context.Context, req resource.CreateReq
 		},
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Create an environment with name %s", newEnvironment.Name))
+
 	createdEnvironment, err := r.client.CreateEnvironment(newEnvironment)
 
 	if err != nil {
@@ -143,6 +145,8 @@ func (r *EnvironmentResource) Create(ctx context.Context, req resource.CreateReq
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Environment with id %s got created", createdEnvironment.ID))
 
 	// Set the created environment's ID in the Terraform state
 	data.ID = types.StringValue(createdEnvironment.ID)
@@ -168,6 +172,8 @@ func (r *EnvironmentResource) Read(ctx context.Context, req resource.ReadRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Read an environment with id %s", data.ID.ValueString()))
 
 	// Retrieve the environment using the GetEnvironment method
 	environment, err := r.client.GetEnvironment(data.Project.ID.ValueString(), data.ID.ValueString())
@@ -216,6 +222,8 @@ func (r *EnvironmentResource) Update(ctx context.Context, req resource.UpdateReq
 		},
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Update an environment with id %s", updatedEnvironment.ID))
+
 	_, err := r.client.UpdateEnvironment(updatedEnvironment)
 
 	if err != nil {
@@ -225,6 +233,9 @@ func (r *EnvironmentResource) Update(ctx context.Context, req resource.UpdateReq
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Environment with id %s got updated", updatedEnvironment.ID))
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -239,6 +250,8 @@ func (r *EnvironmentResource) Delete(ctx context.Context, req resource.DeleteReq
 		return
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Delete an environment with id %s", data.ID.ValueString()))
+
 	err := r.client.DeleteEnvironment(data.Project.ID.ValueString(), data.ID.ValueString())
 
 	if err != nil {
@@ -248,6 +261,8 @@ func (r *EnvironmentResource) Delete(ctx context.Context, req resource.DeleteReq
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Environment with id %s got deleted", data.ID.ValueString()))
 }
 
 func (r *EnvironmentResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

@@ -116,6 +116,8 @@ func (r *UserResource) Create(ctx context.Context, req resource.CreateRequest, r
 		Password: data.Password.ValueString(),
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Create a user with email %s", newUser.Email))
+
 	createdUser, err := r.client.CreateUser(newUser)
 
 	if err != nil {
@@ -132,8 +134,7 @@ func (r *UserResource) Create(ctx context.Context, req resource.CreateRequest, r
 	data.Email = types.StringValue(createdUser.Email)
 	data.Role = types.StringValue(createdUser.Role)
 
-	// Write logs using the tflog package
-	tflog.Trace(ctx, "created a user")
+	tflog.Info(ctx, fmt.Sprintf("User with id %s got created", createdUser.ID))
 
 	// Save data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -148,6 +149,8 @@ func (r *UserResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Read a user with id %s", data.ID.ValueString()))
 
 	// Retrieve the user using the GetUser method
 	user, err := r.client.GetUser(data.ID.ValueString())
@@ -188,6 +191,8 @@ func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		Password: data.Password.ValueString(),
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Update a user with id %s", updatedUser.ID))
+
 	_, err := r.client.UpdateUser(updatedUser)
 
 	if err != nil {
@@ -197,6 +202,9 @@ func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("User with id %s got updated", updatedUser.ID))
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -211,6 +219,8 @@ func (r *UserResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		return
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Delete a user with id %s", data.ID.ValueString()))
+
 	err := r.client.DeleteUser(data.ID.ValueString())
 
 	if err != nil {
@@ -220,6 +230,8 @@ func (r *UserResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("User with id %s got deleted", data.ID.ValueString()))
 }
 
 func (r *UserResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

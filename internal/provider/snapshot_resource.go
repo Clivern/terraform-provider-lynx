@@ -127,6 +127,8 @@ func (r *SnapshotResource) Create(ctx context.Context, req resource.CreateReques
 		},
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Create a snapshot with title %s", newSnapshot.Title))
+
 	createdSnapshot, err := r.client.CreateSnapshot(newSnapshot)
 
 	if err != nil {
@@ -137,15 +139,14 @@ func (r *SnapshotResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Snapshot with title %s got created", newSnapshot.Title))
+
 	// Set the created snapshot's ID in the Terraform state
 	data.ID = types.StringValue(createdSnapshot.ID)
 	data.Title = types.StringValue(createdSnapshot.Title)
 	data.RecordType = types.StringValue(createdSnapshot.RecordType)
 	data.RecordID = types.StringValue(createdSnapshot.RecordID)
 	data.Team.ID = types.StringValue(createdSnapshot.Team.ID)
-
-	// Write logs using the tflog package
-	tflog.Trace(ctx, "created a snapshot")
 
 	// Save data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -160,6 +161,8 @@ func (r *SnapshotResource) Read(ctx context.Context, req resource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Read a snapshot with id %s", data.ID.ValueString()))
 
 	// Retrieve the snapshot using the GetSnapshot method
 	snapshot, err := r.client.GetSnapshot(data.ID.ValueString())
@@ -211,6 +214,8 @@ func (r *SnapshotResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Delete a snapshot with id %s", data.ID.ValueString()))
+
 	err := r.client.DeleteSnapshot(data.ID.ValueString())
 
 	if err != nil {
@@ -220,6 +225,8 @@ func (r *SnapshotResource) Delete(ctx context.Context, req resource.DeleteReques
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Snapshot with id %s got deleted", data.ID.ValueString()))
 }
 
 func (r *SnapshotResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

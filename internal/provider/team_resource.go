@@ -127,6 +127,8 @@ func (r *TeamResource) Create(ctx context.Context, req resource.CreateRequest, r
 		Members:     members,
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Create a team with name %s", newTeam.Name))
+
 	createdTeam, err := r.client.CreateTeam(newTeam)
 
 	if err != nil {
@@ -137,11 +139,10 @@ func (r *TeamResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Team with id %s got created", createdTeam.ID))
+
 	// Set the created team's ID in the Terraform state
 	data.ID = types.StringValue(createdTeam.ID)
-
-	// Write logs using the tflog package
-	tflog.Trace(ctx, "created a team")
 
 	// Save data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -156,6 +157,8 @@ func (r *TeamResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Read a team with id %s", data.ID.ValueString()))
 
 	// Retrieve the team using the GetTeam method
 	team, err := r.client.GetTeam(data.ID.ValueString())
@@ -209,6 +212,8 @@ func (r *TeamResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		Members:     members,
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Update a team with id %s", updatedTeam.ID))
+
 	_, err := r.client.UpdateTeam(updatedTeam)
 
 	if err != nil {
@@ -218,6 +223,9 @@ func (r *TeamResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Team with id %s got updated", updatedTeam.ID))
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -232,6 +240,8 @@ func (r *TeamResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		return
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Delete a team with id %s", data.ID.ValueString()))
+
 	err := r.client.DeleteTeam(data.ID.ValueString())
 
 	if err != nil {
@@ -241,6 +251,8 @@ func (r *TeamResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Team with id %s got deleted", data.ID.ValueString()))
 }
 
 func (r *TeamResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

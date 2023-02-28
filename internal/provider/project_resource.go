@@ -128,6 +128,8 @@ func (r *ProjectResource) Create(ctx context.Context, req resource.CreateRequest
 
 	createdProject, err := r.client.CreateProject(newProject)
 
+	tflog.Info(ctx, fmt.Sprintf("Read a project with name %s", newProject.Name))
+
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Client Error",
@@ -143,8 +145,7 @@ func (r *ProjectResource) Create(ctx context.Context, req resource.CreateRequest
 	data.Description = types.StringValue(createdProject.Description)
 	data.Team.ID = types.StringValue(createdProject.Team.ID)
 
-	// Write logs using the tflog package
-	tflog.Trace(ctx, "created a project")
+	tflog.Info(ctx, fmt.Sprintf("Project with id %s got created", createdProject.ID))
 
 	// Save data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -159,6 +160,8 @@ func (r *ProjectResource) Read(ctx context.Context, req resource.ReadRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Read a project with id %s", data.ID.ValueString()))
 
 	// Retrieve the project using the GetProject method
 	project, err := r.client.GetProject(data.ID.ValueString())
@@ -206,6 +209,8 @@ func (r *ProjectResource) Update(ctx context.Context, req resource.UpdateRequest
 		},
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Update a project with id %s", updatedProject.ID))
+
 	_, err := r.client.UpdateProject(updatedProject)
 
 	if err != nil {
@@ -215,6 +220,9 @@ func (r *ProjectResource) Update(ctx context.Context, req resource.UpdateRequest
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Project with id %s got updated", updatedProject.ID))
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -229,6 +237,8 @@ func (r *ProjectResource) Delete(ctx context.Context, req resource.DeleteRequest
 		return
 	}
 
+	tflog.Info(ctx, fmt.Sprintf("Delete a project with id %s", data.ID.ValueString()))
+
 	err := r.client.DeleteProject(data.ID.ValueString())
 
 	if err != nil {
@@ -238,6 +248,8 @@ func (r *ProjectResource) Delete(ctx context.Context, req resource.DeleteRequest
 		)
 		return
 	}
+
+	tflog.Info(ctx, fmt.Sprintf("Project with id %s got deleted", data.ID.ValueString()))
 }
 
 func (r *ProjectResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
