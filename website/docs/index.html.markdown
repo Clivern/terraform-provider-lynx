@@ -8,15 +8,52 @@ description: |-
 
 # Lynx Provider
 
-The Lynx Provider can be used to configure infrastructure in [Lynx Terraform backend](https://github.com/Clivern/Lynx/blob/main/README.md) using the Lynx API's. Documentation regarding the [Data Sources](/docs/configuration/data-sources.html) and [Resources](/docs/configuration/resources.html) supported by the Lynx Provider can be found in the navigation to the left.
+The Lynx Provider can be used to configure infrastructure in [Lynx Terraform backend](https://github.com/Clivern/Lynx/blob/main/README.md) using the Lynx API's. Documentation regarding the Data Sources and Resources supported by the Lynx Provider can be found in the navigation to the left.
 
-To learn the basics of Terraform using this provider, follow the
-hands-on [get started tutorials](https://github.com/Clivern/Lynx/blob/main/README.md).
+To learn the basics of Terraform using this provider, follow the hands-on [Get started tutorial](https://github.com/Clivern/Lynx/blob/main/README.md).
 
-## Authenticating to Azure
+## Authenticating to Lynx
 
-## Example Usage
+### Example Usage
 
+```terraform
+# Configure the Lynx Provider 
+provider "lynx" {
+  api_url = "http://localhost:4000/api/v1"
+  api_key = "~api key here~"
+}
+# Create the resources
+```
+
+~> **IMPORTANT** Hard-coding yourLynx programmatic API key pair into a Terraform configuration is not recommended.
+Consider the risks, especially the inadvertent submission of a configuration file containing secrets to a public repository.
+
+### Environment Variables
+
+You can also provide your credentials via the environment variables, 
+Lynx programmatic API key pair respectively:
+
+Usage (prefix the export commands with a space to avoid the keys being recorded in OS history):
+
+```shell
+$ export LYNX_API_URL="xxxx"
+$ export LYNX_API_KEY="xxxx"
+$ terraform plan
+```
+Please find more details in [`Lynx documentation`](https://lynx.clivern.com/documentation/api-and-tf-provider/).
+
+## Argument Reference
+In order to set up authentication with the Lynx provider, you must generate a programmatic API key for Lynx.
+
+The following arguments are supported:
+
+* `api_url` - (Required) A `api_url` block to be used to set the Lynx API endpoint.
+* `api_key` - (Required) A `api_key` block to be used for the authentication in the Lynx API. 
+
+## Helpful Links/Information
+
+* Getting started with [Lynx](https://lynx.clivern.com/documentation/getting-started/).
+* Changelogs for each release version of `terraform-provider-lynx` [here](https://github.com/clivern/terraform-provider-lynx/releases).
 
 ## Bugs and Feature Requests
 
@@ -34,12 +71,3 @@ If you have configuration questions, or general questions about using the provid
 
 * [Terraform's community resources](https://www.terraform.io/docs/extend/community/index.html)
 * [HashiCorp support](https://support.hashicorp.com) for Terraform Enterprise customers
-
-## Argument Reference
-
-The following arguments are supported:
-
-* `client_id` - (Optional).
-
--> **Note:** When Terraform is configured to use credentials with limited permissions you *must* set `skip_provider_registration` to true (or the environment variable `ARM_SKIP_PROVIDER_REGISTRATION=true`) in order to account for this - otherwise Terraform will, as described above, try to register any Resource Providers.
-
