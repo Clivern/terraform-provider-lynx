@@ -1,7 +1,8 @@
 module github.com/clivern/terraform-provider-lynx
 
-go 1.21
-toolchain go1.22.5
+go 1.22.0
+
+toolchain go1.25.1
 
 require (
 	github.com/hashicorp/terraform-plugin-framework v1.13.0
