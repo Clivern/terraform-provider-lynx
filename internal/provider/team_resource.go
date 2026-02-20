@@ -7,7 +7,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/clivern/terraform-provider-lynx/sdk"
 
@@ -110,14 +109,11 @@ func (r *TeamResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	membersList := data.Members.Elements()
-
-	members := make([]string, 0, len(membersList))
-
-	for i := 0; i < len(membersList); i++ {
-		member := membersList[i]
-
-		members = append(members, strings.Trim(member.String(), "\""))
+	var members []string
+	diagInfo := data.Members.ElementsAs(ctx, &members, false)
+	resp.Diagnostics.Append(diagInfo...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
 	newTeam := sdk.Team{
@@ -188,19 +184,15 @@ func (r *TeamResource) Update(ctx context.Context, req resource.UpdateRequest, r
 
 	// Read Terraform plan data into the model
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	membersList := data.Members.Elements()
-
-	members := make([]string, 0, len(membersList))
-
-	for i := 0; i < len(membersList); i++ {
-		member := membersList[i]
-
-		members = append(members, member.String())
+	var members []string
+	diagInfo := data.Members.ElementsAs(ctx, &members, false)
+	resp.Diagnostics.Append(diagInfo...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
 	// Update the team using the UpdateTeam method
