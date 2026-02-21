@@ -10,11 +10,13 @@ import (
 
 	"github.com/clivern/terraform-provider-lynx/sdk"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
@@ -67,6 +69,9 @@ func (r *TeamResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: "Team's members",
 				ElementType:         types.StringType,
 				Required:            true,
+				Validators: []validator.List{
+					listvalidator.NoNullValues(),
+				},
 			},
 			"id": schema.StringAttribute{
 				Computed:            true,
